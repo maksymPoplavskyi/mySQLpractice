@@ -6,5 +6,5 @@ return [
         'user' => 'root',
         'password' => 'rootpass',
         'database' => 'registration_users'
-    ]
+    ],
 ];

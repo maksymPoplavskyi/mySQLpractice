@@ -1,7 +1,7 @@
 version: '3'
 services:
   php:
-    container_name: php_latest
+    container_name: php
     domainname: php
     hostname: php
     build:

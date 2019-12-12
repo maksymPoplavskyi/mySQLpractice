@@ -1,30 +1,27 @@
 <?php
 
-const PUBLIC_PATH = __DIR__;
+require __DIR__ . '/../vendor/autoload.php';
 
-require_once PUBLIC_PATH . '/../php/helpers/database.php';
-$mainConnection = getConnection('main');
+session_start();
 
-$GLOBALS['main_connection'] = $mainConnection;
+//classes
+use router\Router;
 
+//autoload
+spl_autoload_register('autoload');
+
+function autoload(string $className)
+{
+    $className = strtolower($className);
+    $path = explode('\\', $className);
+    $path[count($path) - 1] = ucfirst($path[count($path) - 1]);
+    $className = implode('/', $path);
+
+    require_once '../' . $className . '.php';
+}
+
+//routes
 $uri = explode('?', $_SERVER['REQUEST_URI'])[0];
 
-switch (mb_strtolower($uri)) {
-    case '/':
-    {
-        require_once PUBLIC_PATH . '/../php/views/main.php';
-        break;
-    }
-    case '/views/register':
-    {
-        require_once PUBLIC_PATH . '/../php/views/register.php';
-    }
-    case '/execute/register':
-    {
-        require_once PUBLIC_PATH . '/../php/execute/register.php';
-        break;
-    }
-    default: {
-        echo 'PAGE NOT FOUND'; die;
-    }
-}
+$router = new Router();
+$router->request($uri);
